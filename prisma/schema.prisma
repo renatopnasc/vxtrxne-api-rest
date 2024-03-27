@@ -8,11 +8,38 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String
-  email         String   @unique
+  email         String    @unique
   password_hash String
-  created_at    DateTime @default(now())
+  created_at    DateTime  @default(now())
+  Product       Product[]
 
   @@map("users")
+}
+
+model Category {
+  id      String    @id @default(uuid())
+  title   String
+  Product Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  title       String
+  price       Decimal
+  description String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  category    Category @relation(fields: [category_id], references: [id])
+  category_id String
+
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+
+  @@map("products")
 }
